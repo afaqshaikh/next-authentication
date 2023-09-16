@@ -1,0 +1,16 @@
+{
+    "users": [
+        {
+            "_id": "be0cfe9a-1aee-41f2-912f-1d46d0d66372",
+            "name": "Hasan",
+            "email": "hasah@gmail.com",
+            "password": "$2a$10$Omx4bG7NcdWfbFoBTw0NROjknEUuQ1voNw0NjeszkiWNRXcb8Zady"
+        },
+        {
+            "_id": "edb453fd-a7d6-487d-bdaf-0f12d12f17e5",
+            "name": "afaque",
+            "email": "afaque@gmail.com",
+            "password": "$2a$10$O06L1PDRU7B.nMKugABBvuS2tinpxCyXvKCMk1xgf21VcDB/GA9la"
+        }
+    ]
+}
