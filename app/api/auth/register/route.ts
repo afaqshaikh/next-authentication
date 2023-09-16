@@ -3,12 +3,16 @@ import { randomUUID } from 'crypto';
 import { UserRequest, UserData } from '@/app/types';
 import { findDataInDB, writeDataInDB } from '@/app/helpers/db';
 import bcryptjs from 'bcryptjs'
+import { RegisterUserSchema, UserRequestData } from '@/app/helpers/validations/user.schema';
+import { z } from 'zod';
 
 export const POST = async (request: NextRequest) => {
     
     try {
 
-        const userData: UserRequest = await request.json()
+        const userData: UserRequestData = await request.json()
+        
+        RegisterUserSchema.parse(userData)
         // console.log(userData)
 
         const findUser: UserData | undefined = findDataInDB(userData.email)
@@ -20,9 +24,6 @@ export const POST = async (request: NextRequest) => {
         const salt: string = await bcryptjs.genSalt(10);
 
         const hashPassword: string = await bcryptjs.hash(userData.password, salt);
-
-        // console.log(salt,hashPassword);
-        
 
         const newUser: UserData = {
             _id: randomUUID(),
@@ -44,6 +45,14 @@ export const POST = async (request: NextRequest) => {
         }
 
     } catch (error:any) {
+
+        if (error instanceof z.ZodError) {
+            return NextResponse.json({
+                "error": error.issues
+            }, {
+                status: 500
+            });
+          }
         
         return NextResponse.json({
             "message": error.message,

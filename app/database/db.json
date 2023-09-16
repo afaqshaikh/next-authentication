@@ -11,6 +11,12 @@
             "name": "afaque",
             "email": "afaque@gmail.com",
             "password": "$2a$10$O06L1PDRU7B.nMKugABBvuS2tinpxCyXvKCMk1xgf21VcDB/GA9la"
+        },
+        {
+            "_id": "bc8792dc-8650-4181-b3f5-e59e7471c940",
+            "name": "afaque",
+            "email": "afaque12",
+            "password": "$2a$10$WC9opJmJDXH7g0Xqy1x7Xe5eC.siK8dXqX7rrAK8aQyPDfeyX.y92"
         }
     ]
 }
