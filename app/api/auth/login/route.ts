@@ -3,9 +3,21 @@ import { UserData } from '@/app/types';
 import { NextRequest, NextResponse } from 'next/server'
 import bcryptjs from 'bcryptjs';
 import jwt from "jsonwebtoken";
+import { SignJWT } from 'jose';
+import { log } from 'console';
+import { Limiter } from '@/app/config/limiter';
 
 export async function POST(request: NextRequest) {
+
     try {
+
+        const remainingRequests = await Limiter.removeTokens(1);
+        console.log(remainingRequests);
+
+        if (remainingRequests < 0) {
+            return NextResponse.json({ "error": "Too many requests" }, { status: 429 });
+        }
+        
         const userData = await request.json()
 
         const user: UserData | undefined = findDataInDB(userData.email);
@@ -24,9 +36,13 @@ export async function POST(request: NextRequest) {
             expiresIn: "7d"
         });
 
-        const response = NextResponse.json({ "message": "Success" }, { status: 200 });
+        const secret = new TextEncoder().encode(process.env.SECRET_KEY as string)
 
-        response.cookies.set('authToken', token, {
+        const joseToken = await new SignJWT({ _id: user._id }).setProtectedHeader({alg: "HS256"}).setExpirationTime('7d').setIssuedAt().sign(secret)
+
+        const response = NextResponse.json({ "message": "Success",token:joseToken }, { status: 200 });
+
+        response.cookies.set('authToken', joseToken, {
             httpOnly: true
         });
 
